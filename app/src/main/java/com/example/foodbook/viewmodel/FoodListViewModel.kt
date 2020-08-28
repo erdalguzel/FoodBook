@@ -3,20 +3,45 @@ package com.example.foodbook.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.foodbook.model.Food
+import com.example.foodbook.service.FoodAPIService
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.observers.DisposableSingleObserver
+import io.reactivex.schedulers.Schedulers
 
 class FoodListViewModel : ViewModel() {
     val foodData = MutableLiveData<List<Food>>()
     val foodErrorMessage = MutableLiveData<Boolean>()
     val foodProgress = MutableLiveData<Boolean>()
 
-    fun refreshData() {
-        val banana = Food("Banana", "100", "50", "20", "2", "")
-        val strawberry = Food("Strawberry", "200", "70", "40", "4", "")
-        val melon = Food("Melon", "300", "90", "60", "6", "")
+    private val foodApi = FoodAPIService()
+    private val disposable = CompositeDisposable()
 
-        foodData.value = listOf(banana, strawberry, melon)
-        foodErrorMessage.value = false
-        foodProgress.value = false
+    fun refreshData() {
+        fetchJSONData()
+    }
+
+    private fun fetchJSONData() {
+        foodProgress.value = true
+
+        disposable.add(
+            foodApi.getData().subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(object : DisposableSingleObserver<List<Food>>() {
+                    override fun onSuccess(t: List<Food>) {
+                        foodData.value = t
+                        foodProgress.value = false
+                        foodErrorMessage.value = false
+                    }
+
+                    override fun onError(e: Throwable) {
+                        foodErrorMessage.value = true
+                        foodProgress.value = false
+                        e.printStackTrace()
+                    }
+
+                }
+                ))
     }
 
 }

@@ -42,7 +42,7 @@ class FoodDetailFragment : Fragment() {
         observeData()
     }
 
-    fun observeData() {
+    private fun observeData() {
         viewModel.foodLiveData.observe(viewLifecycleOwner, Observer { food ->
             food.let { it ->
                 foodNameId.text = it.foodName

@@ -18,10 +18,6 @@ class FoodListFragment : Fragment() {
     private lateinit var viewModel: FoodListViewModel
     private var recyclerFoodAdapter = FoodRecyclerAdapter(arrayListOf())
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -38,10 +34,18 @@ class FoodListFragment : Fragment() {
         foodListRecyclerView.layoutManager = LinearLayoutManager(context)
         foodListRecyclerView.adapter = recyclerFoodAdapter
 
+        swipeRefreshLayout.setOnRefreshListener {
+            loadingProgressBar.visibility = View.VISIBLE
+            foodListRecyclerView.visibility = View.GONE
+            errorTextView.visibility = View.GONE
+            viewModel.refreshData()
+            swipeRefreshLayout.isRefreshing = false
+        }
+
         observeLiveData()
     }
 
-    fun observeLiveData() {
+    private fun observeLiveData() {
         viewModel.foodData.observe(viewLifecycleOwner, Observer { observer ->
             observer.let {
                 foodListRecyclerView.visibility = View.VISIBLE

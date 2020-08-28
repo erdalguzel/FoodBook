@@ -7,10 +7,12 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.example.foodbook.R
 import com.example.foodbook.model.Food
+import com.example.foodbook.util.downloadImage
+import com.example.foodbook.util.drawPlaceholder
 import com.example.foodbook.view.FoodListFragmentDirections
 import kotlinx.android.synthetic.main.food_recycler_row.view.*
 
-class FoodRecyclerAdapter(val foodList: ArrayList<Food>) :
+class FoodRecyclerAdapter(private val foodList: ArrayList<Food>) :
     RecyclerView.Adapter<FoodRecyclerAdapter.FoodViewHolder>() {
 
     class FoodViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -31,6 +33,11 @@ class FoodRecyclerAdapter(val foodList: ArrayList<Food>) :
             val action = FoodListFragmentDirections.actionFoodListFragmentToFoodDetailFragment(0)
             Navigation.findNavController(it).navigate(action)
         }
+
+        holder.itemView.foodImageView.downloadImage(
+            foodList[position].foodUrl,
+            drawPlaceholder(holder.itemView.context)
+        )
     }
 
     override fun getItemCount(): Int {
