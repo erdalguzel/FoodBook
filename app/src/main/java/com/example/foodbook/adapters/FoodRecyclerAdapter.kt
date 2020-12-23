@@ -15,9 +15,7 @@ import kotlinx.android.synthetic.main.food_recycler_row.view.*
 class FoodRecyclerAdapter(private val foodList: ArrayList<Food>) :
     RecyclerView.Adapter<FoodRecyclerAdapter.FoodViewHolder>() {
 
-    class FoodViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-    }
+    class FoodViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FoodViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -30,7 +28,7 @@ class FoodRecyclerAdapter(private val foodList: ArrayList<Food>) :
         holder.itemView.foodCalorie.text = foodList[position].foodCalorie
         //Image is to be added
         holder.itemView.setOnClickListener {
-            val action = FoodListFragmentDirections.actionFoodListFragmentToFoodDetailFragment(0)
+            val action = FoodListFragmentDirections.actionFoodListFragmentToFoodDetailFragment(foodList[position].uuid)
             Navigation.findNavController(it).navigate(action)
         }
 

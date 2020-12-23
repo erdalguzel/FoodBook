@@ -1,15 +1,23 @@
 package com.example.foodbook.viewmodel
 
+import android.app.Application
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.example.foodbook.model.Food
+import com.example.foodbook.service.FoodDAO
+import com.example.foodbook.service.FoodDatabase
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.launch
 
-class FoodDetailViewModel : ViewModel() {
+class FoodDetailViewModel(application: Application) : BaseViewModel(application) {
 
     val foodLiveData = MutableLiveData<Food>()
 
-    fun fetchJSONData() {
-        val banana = Food("Banana", "100", "50", "20", "2", "")
-        foodLiveData.value = banana
+    @InternalCoroutinesApi
+    fun fetchRoomData(id: Int) {
+        launch {
+            val dao = FoodDatabase(getApplication()).foodDao()
+            val food = dao.getFoodById(id)
+            foodLiveData.value = food
+        }
     }
 }

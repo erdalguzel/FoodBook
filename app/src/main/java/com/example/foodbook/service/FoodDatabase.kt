@@ -8,7 +8,7 @@ import com.example.foodbook.model.Food
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.internal.synchronized
 
-@Database(entities = arrayOf(Food::class), version = 1)
+@Database(entities = [Food::class], version = 1)
 abstract class FoodDatabase : RoomDatabase() {
 
     abstract fun foodDao(): FoodDAO

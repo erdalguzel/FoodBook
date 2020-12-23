@@ -12,10 +12,12 @@ class FoodAPIService {
     private val BASE_URL = "https://raw.githubusercontent.com/"
 
     // No need to add addCallAdapterFactory() if you do not use RxJava
-    private val api =
-        Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create()).build()
-            .create(FoodAPI::class.java)
+    private val api = Retrofit.Builder()
+        .baseUrl(BASE_URL)
+        .addConverterFactory(GsonConverterFactory.create())
+        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+        .build()
+        .create(FoodAPI::class.java)
 
     fun getData(): Single<List<Food>> {
         return api.getFood()
